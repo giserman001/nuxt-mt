@@ -8,34 +8,40 @@ const logger = require('koa-logger')
 const session = require('koa-generic-session')
 const Redis = require('koa-redis')
 
+const mongoose = require('mongoose')
 const index = require('./routes/index')
 const users = require('./routes/users')
 const pv = require('./middleware/koa-pv')
-const mongoose = require('mongoose')
 // 数据库配置
 const dbConfig = require('./dbs/config')
 
 // error handler
 onerror(app)
 app.keys = ['key', 'keys']
-app.use(session({
-  key: 'mt',
-  prefix: 'mtpr',
-  store: new Redis()
-}))
+app.use(
+  session({
+    key: 'mt',
+    prefix: 'mtpr',
+    store: new Redis(),
+  })
+)
 
 // middlewares
-app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
-}))
+app.use(
+  bodyparser({
+    enableTypes: ['json', 'form', 'text'],
+  })
+)
 app.use(pv())
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 
-app.use(views(__dirname + '/views', {
-  extension: 'ejs'
-}))
+app.use(
+  views(__dirname + '/views', {
+    extension: 'ejs',
+  })
+)
 
 // logger
 app.use(async (ctx, next) => {
@@ -49,14 +55,14 @@ app.use(async (ctx, next) => {
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 
-//链接db
+// 链接db
 mongoose.connect(dbConfig.dbs, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 })
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
-});
+})
 
 module.exports = app
