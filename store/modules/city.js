@@ -1,0 +1,27 @@
+const state = {
+  app: [],
+}
+
+const getters = {
+  app: (state) => state.app,
+}
+
+const mutations = {
+  add(state, text) {
+    state.app.push(text)
+  },
+}
+
+const actions = {
+  add({ commit }, text) {
+    commit('add', text)
+  },
+}
+
+export default {
+  namespaced: true,
+  state,
+  getters,
+  mutations,
+  actions,
+}

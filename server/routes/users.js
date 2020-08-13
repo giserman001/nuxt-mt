@@ -11,7 +11,11 @@ router.get('/', function (ctx, next) {
 })
 
 router.get('/bar', function (ctx, next) {
-  ctx.body = 'this is a users/bar response'
+  ctx.body = {
+    code: 0,
+    data: ['a', 'b', 'c'],
+    msg: '成功'
+  }
 })
 // 增
 router.post('/addPerson', async function(ctx, next) {
